@@ -1,3 +1,7 @@
+# About - React Calculator
+
+This is a calculator I am building using React to get familiar with the tools and abilites of React
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
