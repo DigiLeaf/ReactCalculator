@@ -15,7 +15,6 @@ const btnValues = [
 ];
 
 
-
 function App() {
   let [calc, setCalc] = useState({
     sign: "",
@@ -26,9 +25,13 @@ function App() {
   const numClickHandler = (e) =>{
     e.preventDefault();
     const value = e.target.innerHTML;
+    
+    //Debug
+    //console.log("clicked value", value)
+    //console.log("before value: ", calc.num)
 
     //number can be at most 16 integers long
-    if (calc.num.length < 16){
+    if (removeSpaces(calc.num).length < 16){
       setCalc({
         ...calc,
         num:
@@ -36,14 +39,14 @@ function App() {
             ? "0"
             //check if whole num
 
-            : calc.num % 1 === 0
+            : removeSpaces(calc.num) % 1 === 0
             //add new digit and convert back to a num
             //removes leading zeroes 
-            ? Number(calc.num + value)
+            ? toLocaleString(Number(removeSpaces(calc.num + value)))
 
             //if num is already a decimal,
             //keep it as a string so decimald format is preserved
-            : calc.num + value,
+            : toLocaleString(calc.num + value),
 
         // if no operator been selected reset result to 0.    
         res: !calc.sign ? 0 : calc.res,
@@ -95,7 +98,13 @@ function App() {
         res: 
           calc.num === "0" && calc.sign === "/"
             ? "Can't divide with 0"
-            : math(Number(calc.res), Number(calc.num), calc.sign),
+            : toLocaleString(
+              math(
+                Number(removeSpaces(calc.res)),
+                Number(removeSpaces(calc.num)),
+                calc.sign
+              )
+            ),
         sign: "",
         num: 0,
       });
@@ -105,15 +114,15 @@ function App() {
    const invertClickHandler= ()=>{
     setCalc({
       ...calc,
-      num: calc.num ? calc.num * -1 : 0,
-      res: calc.res ? calc.res * -1 : 0,
+      num: calc.num ? toLocaleString(removeSpaces(calc.num) * -1) : 0,
+      res: calc.res ? toLocaleString(removeSpaces(calc.res) * -1) : 0,
       sign: "",
-    })
-   }
+    });
+   };
 
    const percentClickHandler = () => {
-    let num = calc.num ? parse.Float(calc.num) : 0;
-    let res = calc.res ? parse.Float(calc.res) : 0;
+    let num = calc.num ? parse.Float(removeSpaces(calc.num)) : 0;
+    let res = calc.res ? parse.Float(removeSpaces(calc.res)) : 0;
 
     setCalc({
       ...calc,
@@ -132,6 +141,13 @@ function App() {
     });
    };
 
+
+    //takes a number; format into a string and create spaces for thousands mark
+  const toLocaleString = (num) =>
+    String(num).replace(/(?<!\..*)(\d)(?=(?:\d{3})+(?:\.|$))/g, "$1 ");
+
+    //does the opposite of localeString; removes the spaces so we can convert to numbers easily
+  const removeSpaces = (num) => num.toString().replace(/\s/g,"")
 
   return(
     <Wrapper>
@@ -160,7 +176,7 @@ function App() {
                     : numClickHandler
                 }
               />
-            )
+            );
           })
         }
         

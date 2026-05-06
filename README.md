@@ -1,6 +1,19 @@
 # About - React Calculator
 
-This is a calculator I am building using React to get familiar with the tools and abilites of React
+This is a calculator I built using React to get familiar with the tools and abilites of React
+
+# Features
+
+- Add, Subtract Multiply Divide
+
+- Supports decimal values
+
+- Calculate percentages
+
+- Invert values
+
+- Reset functionality
+
 
 # React + Vite
 
